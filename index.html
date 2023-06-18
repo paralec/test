@@ -26,19 +26,21 @@ limitations under the License.
 </head>
 
 <body>
-    <h1>Test</h1>
+    <h3>Output</h3>
     <p id="output"></p>
+    <h3>Error</h3>
+    <p id="error-box"></p>
 </body>
 <script>
     window.onload = () => {
         const output = document.getElementById('output');
-        const keys = [];
-        for (const key in window) {
-            keys.push(key);
-        }
-        keys.sort();
-        for (const key of keys) {
-            output.innerText += key + '\n';
+        const errorBox = document.getElementById('error-box');
+        const nfc = null;
+
+        try {
+          nfc = new NDEFReader();
+        } catch {
+          errorBox.innerText = "Failed to create NFC reader";
         }
     };
 </script>
