@@ -39,8 +39,8 @@ limitations under the License.
 
         try {
           nfc = new NDEFReader();
-        } catch {
-          errorBox.innerText = "Failed to create NFC reader";
+        } catch (e) {
+          errorBox.innerText = e.toString();
         }
     };
 </script>
