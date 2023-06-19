@@ -110,20 +110,20 @@
         try {
             const ndef = new NDEFReader();
             await ndef.scan();
-            log("Scan started");
+            log("Scanning...");
 
             ndef.addEventListener("readingerror", () => {
-                log("Cannot read data from the NFC tag. Try another one?", true);
+                log(`Cannot read data from the NFC tag!`, true);
                 setProgress(false);
             });
 
             ndef.addEventListener("reading", ({ message, serialNumber }) => {
                 log(`Serial Number: ${serialNumber}`);
-                log(`Records: (${message.records.length})`);
+                log(`Records:\n${JSON.stringify(message)}`);
                 setProgress(false);
             });
         } catch (error) {
-            log(error, true);
+            log('Failed to start scanning!\n' + error, true);
             setProgress(false);
         }
     }
@@ -131,9 +131,9 @@
     window.onload = () => {
         try {
             const ndef = new NDEFReader();
-            log('NDEFReader created');
+            log('NDEF is available!');
         } catch (e) {
-            log(e, true);
+            log('NDEF is not available!', true);
             document.getElementById('scan').setAttribute('disabled', 'disabled');
             return;
         }
