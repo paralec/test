@@ -125,20 +125,19 @@
                 };
             })
             .catch((error) => {
-                console.log(`Error! Scan failed to start: ${error}.`);
+                log(`Scan failed to start!\n${error}`, true);
                 setProgress(false);
             });
     }
 
     window.onload = () => {
-        log('v0.1.0.0');
+        log('v0.2.0.0');
         try {
             const ndef = new NDEFReader();
             log('NDEF is available!');
         } catch (e) {
             log('NDEF is not available!', true);
             document.getElementById('scan').setAttribute('disabled', 'disabled');
-            return;
         }
     };
 </script>
