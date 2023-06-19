@@ -112,6 +112,8 @@
             await ndef.scan();
             log("Scanning...");
             
+            log(typeof ndef.onreading);
+
             ndef.onreadingerror = () => {
                 log(`Cannot read data from the NFC tag!`, true);
                 setProgress(false);
