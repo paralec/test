@@ -106,32 +106,35 @@
         }
     }
 
-    function scan() {
+    function onErrorReading(e) {
+        log(`Cannot read data from the NFC tag!`, true);
+        setProgress(false);
+
+    }
+
+    function onReading(e) {
+        log(`Serial Number: ${e.serialNumber}`);
+        log('Records:\n' + JSON.stringify(e.message));
+        setProgress(false);
+    }
+
+    async function scan() {
         setProgress(true);
 
-        const ndef = new NDEFReader();
-        ndef
-            .scan()
-            .then(() => {
-                log("Scanning...");
-                ndef.onreadingerror = (event) => {
-                    log(`Cannot read data from the NFC tag!`, true);
-                    setProgress(false);
-                };
-                ndef.onreading = (event) => {
-                    log(`Serial Number: ${serialNumber}`);
-                    log(`Message:\n${JSON.stringify(message)}`);
-                    setProgress(false);
-                };
-            })
-            .catch((error) => {
-                log(`Scan failed to start!\n${error}`, true);
-                setProgress(false);
-            });
+        try {
+            const ndef = new NDEFReader();
+            await ndef.scan();
+            log("Scanning...");
+            ndef.addEventListener("readingerror", onErrorReading, { once: true });
+            ndef.addEventListener("reading", onReading, { once: true });
+        } catch (error) {
+            log('Failed to start scanning!\n' + error, true);
+            setProgress(false);
+        }
     }
 
     window.onload = () => {
-        log('v0.2.0.0');
+        log('v0.3.0.0');
         try {
             const ndef = new NDEFReader();
             log('NDEF is available!');
