@@ -112,16 +112,17 @@
             await ndef.scan();
             log("Scanning...");
 
-            ndef.addEventListener("readingerror", () => {
+            ndef.onreadingerror = () => {
                 log(`Cannot read data from the NFC tag!`, true);
                 setProgress(false);
-            });
+            };
 
-            ndef.addEventListener("reading", ({ message, serialNumber }) => {
+            ndef.onreading = () => ({ message, serialNumber }) => {
                 log(`Serial Number: ${serialNumber}`);
                 log(`Records:\n${JSON.stringify(message)}`);
                 setProgress(false);
-            });
+            };
+
         } catch (error) {
             log('Failed to start scanning!\n' + error, true);
             setProgress(false);
