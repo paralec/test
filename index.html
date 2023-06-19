@@ -84,8 +84,6 @@
     <p id="output" class="output"></p>
 </body>
 <script>
-    let firstRun = true;
-
     function log(msg, isError) {
         const el = document.getElementById('output');
         msg = '> ' + msg;
@@ -108,35 +106,32 @@
         }
     }
 
-    async function scan() {
+    function scan() {
         setProgress(true);
 
-        try {
-            const ndef = new NDEFReader();
-            await ndef.scan();
-            log("Scanning...");
-
-            if (firstRun) {
-                ndef.onreadingerror = () => {
+        const ndef = new NDEFReader();
+        ndef
+            .scan()
+            .then(() => {
+                log("Scanning...");
+                ndef.onreadingerror = (event) => {
                     log(`Cannot read data from the NFC tag!`, true);
                     setProgress(false);
                 };
-
-                ndef.onreading = () => ({ message, serialNumber }) => {
+                ndef.onreading = (event) => {
                     log(`Serial Number: ${serialNumber}`);
-                    log(`Records:\n${JSON.stringify(message)}`);
+                    log(`Message:\n${JSON.stringify(message)}`);
                     setProgress(false);
                 };
-            }
-        } catch (error) {
-            log('Failed to start scanning!\n' + error, true);
-            setProgress(false);
-        }
-
-        firstRun = false;
+            })
+            .catch((error) => {
+                console.log(`Error! Scan failed to start: ${error}.`);
+                setProgress(false);
+            });
     }
 
     window.onload = () => {
+        log('v0.1.0.0');
         try {
             const ndef = new NDEFReader();
             log('NDEF is available!');
