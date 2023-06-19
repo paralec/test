@@ -111,16 +111,18 @@
             const ndef = new NDEFReader();
             await ndef.scan();
             log("Scanning...");
-
+            
             ndef.onreadingerror = () => {
                 log(`Cannot read data from the NFC tag!`, true);
                 setProgress(false);
+                ndef.onreadingerror = null;
             };
 
             ndef.onreading = () => ({ message, serialNumber }) => {
                 log(`Serial Number: ${serialNumber}`);
                 log(`Records:\n${JSON.stringify(message)}`);
                 setProgress(false);
+                ndef.onreading = null;
             };
 
         } catch (error) {
