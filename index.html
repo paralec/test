@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -71,6 +72,7 @@
         }
     }
 </style>
+
 <body>
     <div class="top-bar">
         <h2>NFC</h2>
@@ -82,6 +84,8 @@
     <p id="output" class="output"></p>
 </body>
 <script>
+    let firstRun = true;
+
     function log(msg, isError) {
         const el = document.getElementById('output');
         msg = '> ' + msg;
@@ -111,26 +115,25 @@
             const ndef = new NDEFReader();
             await ndef.scan();
             log("Scanning...");
-            
-            log(typeof ndef.onreading);
 
-            ndef.onreadingerror = () => {
-                log(`Cannot read data from the NFC tag!`, true);
-                setProgress(false);
-                ndef.onreadingerror = null;
-            };
+            if (firstRun) {
+                ndef.onreadingerror = () => {
+                    log(`Cannot read data from the NFC tag!`, true);
+                    setProgress(false);
+                };
 
-            ndef.onreading = () => ({ message, serialNumber }) => {
-                log(`Serial Number: ${serialNumber}`);
-                log(`Records:\n${JSON.stringify(message)}`);
-                setProgress(false);
-                ndef.onreading = null;
-            };
-
+                ndef.onreading = () => ({ message, serialNumber }) => {
+                    log(`Serial Number: ${serialNumber}`);
+                    log(`Records:\n${JSON.stringify(message)}`);
+                    setProgress(false);
+                };
+            }
         } catch (error) {
             log('Failed to start scanning!\n' + error, true);
             setProgress(false);
         }
+
+        firstRun = false;
     }
 
     window.onload = () => {
@@ -144,4 +147,5 @@
         }
     };
 </script>
+
 </html>
