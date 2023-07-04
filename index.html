@@ -107,12 +107,13 @@
     }
 
     function onErrorReading(e) {
+        console.log(e);
         log(`Cannot read data from the NFC tag!`, true);
         setProgress(false);
-
     }
 
     function onReading(e) {
+        console.log(e);
         log(`Serial Number: ${e.serialNumber}`);
         log('Records:\n' + JSON.stringify(e.message));
         setProgress(false);
@@ -134,7 +135,7 @@
     }
 
     window.onload = () => {
-        log('v0.3.0.0');
+        log('v0.4.0.0');
         try {
             const ndef = new NDEFReader();
             log('NDEF is available!');
