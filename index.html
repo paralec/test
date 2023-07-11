@@ -116,10 +116,10 @@
         console.log(e);
         log(`Serial Number: ${e.serialNumber}`);
 
-        let length = temp1?.message?.records?.length;
+        let length = e?.message?.records?.length;
         if (length > 1) {
             for (let i = 0; i < length; i++) {
-                let r = temp1.message.records[i];
+                let r = e.message.records[i];
                 const json = {
                     id: r.id,
                     type: r.recordType,
