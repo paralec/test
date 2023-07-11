@@ -115,7 +115,22 @@
     function onReading(e) {
         console.log(e);
         log(`Serial Number: ${e.serialNumber}`);
-        log('Records:\n' + JSON.stringify(e.message));
+
+        let length = temp1?.message?.records?.length;
+        if (length > 1) {
+            for (let i = 0; i < length; i++) {
+                let r = temp1.message.records[i];
+                const json = {
+                    id: r.id,
+                    type: r.recordType,
+                    encoding: r.encoding,
+                    bytes: r.data.byteLength
+                };
+                log(`Record #%${i}\n` + JSON.stringify(json));
+            }
+        } else {
+            log('Not found NDEF records!', true);
+        }
         setProgress(false);
     }
 
@@ -135,7 +150,7 @@
     }
 
     window.onload = () => {
-        log('v0.4.0.0');
+        log('v0.5.0.0');
         try {
             const ndef = new NDEFReader();
             log('NDEF is available!');
