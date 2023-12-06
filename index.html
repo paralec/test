@@ -127,6 +127,12 @@
                     bytes: r.data.byteLength
                 };
                 log(`Record #%${i}\n` + JSON.stringify(json));
+                let hex = "";
+                for (let i = 0; i < json.bytes; i++) {
+                    let b = r.data.getUint8(i);
+                    hex += (b).toString(16).padStart(2, '0') + ' ';
+                }
+                log(hex);
             }
         } else {
             log('Not found NDEF records!', true);
@@ -150,7 +156,7 @@
     }
 
     window.onload = () => {
-        log('v0.5.0.0');
+        log('v0.6.0.0');
         try {
             const ndef = new NDEFReader();
             log('NDEF is available!');
